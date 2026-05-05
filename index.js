@@ -58,7 +58,9 @@ class TodoList extends Component {
         {text: "Сделать домашку"},
         {text: "Сделать практику"},
         {text: "Пойти домой"}
-      ]
+      ],
+
+      inputValue: ""
     };
   }
 
@@ -71,6 +73,16 @@ class TodoList extends Component {
       return;
     this.state.tasks.push({text: this.state.inputValue});
     this.state.inputValue = "";
+    this.update();
+  };
+
+  onToggleTask = (index) => {
+    this.state.tasks[index].completed = !this.state.tasks[index].completed;
+    this.update();
+  };
+
+  onDeleteTask = (index) => {
+    this.state.tasks.splice(index, 1);
     this.update();
   };
   
@@ -92,14 +104,25 @@ class TodoList extends Component {
       ]),
 
       createElement("ul", { id: "todos" }, 
-        this.state.tasks.map(task => 
-          createElement("li", {}, [
-            createElement("input", { type: "checkbox" }),
-            createElement("label", {}, task.text),
-            createElement("button", {}, "🗑️")
-          ])
-        )
-      ),
+      this.state.tasks.map((task, index) => 
+        createElement("li", {}, [
+          createElement("input", { 
+            type: "checkbox", 
+            ...(task.completed ? { checked: "true" } : {})
+          }, null, {
+            change: () => this.onToggleTask(index)
+          }),
+
+          createElement("label", { 
+            style: task.completed ? "color: gray; text-decoration: line-through;" : "" 
+          }, task.text),
+
+          createElement("button", {}, "🗑️", {
+            click: () => this.onDeleteTask(index)
+          })
+        ])
+      )
+    )
     ]);
   }
 
