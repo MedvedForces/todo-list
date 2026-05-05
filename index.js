@@ -114,7 +114,7 @@ class TodoList extends Component {
           }),
 
           createElement("label", { 
-            style: task.completed ? "color: gray; text-decoration: line-through;" : "" 
+            style: task.completed ? "color: gray;" : "" 
           }, task.text),
 
           createElement("button", {}, "🗑️", {
