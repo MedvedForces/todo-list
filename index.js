@@ -121,36 +121,44 @@ class Task extends Component {
 class TodoList extends Component {
   constructor() {
     super();
+    const savedTasks = localStorage.getItem("todo_tasks");
+    const initialTasks = savedTasks ? JSON.parse(savedTasks) : [
+      { text: "Сделать домашку", completed: false },
+      { text: "Сделать практику", completed: false },
+      { text: "Пойти домой", completed: false }
+    ];
+
     this.state = {
-      tasks: [
-        { text: "Сделать домашку" },
-        { text: "Сделать практику" },
-        { text: "Пойти домой" }
-      ],
+      tasks: initialTasks,
       inputValue: ""
     };
   }
 
+  saveAndUpdate() {
+    localStorage.setItem("todo_tasks", JSON.stringify(this.state.tasks));
+    this.update();
+  }
+
   onAddInputChange = (event) => {
     this.state.inputValue = event.target.value;
-    // Убираем this.update() отсюда
   };
 
   onAddTask = () => {
-    if (this.state.inputValue.trim() === "") return;
-    this.state.tasks.push({ text: this.state.inputValue });
+    if (this.state.inputValue.trim() === "") 
+      return;
+    this.state.tasks.push({text: this.state.inputValue, completed: false});
     this.state.inputValue = "";
-    this.update();
+    this.saveAndUpdate();
   };
 
   onToggleTask = (index) => {
     this.state.tasks[index].completed = !this.state.tasks[index].completed;
-    this.update();
+    this.saveAndUpdate();
   };
 
   onDeleteTask = (index) => {
     this.state.tasks.splice(index, 1);
-    this.update();
+    this.saveAndUpdate();
   };
 
   render() {
