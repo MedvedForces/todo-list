@@ -53,9 +53,7 @@ class Component {
 class AddTask extends Component {
   constructor({ inputValue, onAddInputChange, onAddTask }) {
     super();
-    this.state = { inputValue };
-    this.onAddInputChange = onAddInputChange;
-    this.onAddTask = onAddTask;
+    this.props = { inputValue, onAddInputChange, onAddTask };
   }
 
   render() {
@@ -64,12 +62,12 @@ class AddTask extends Component {
         id: "new-todo",
         type: "text",
         placeholder: "Задание",
-        value: this.state.inputValue
+        value: this.props.inputValue
       }, null, {
-        input: this.onAddInputChange
+        input: this.props.onAddInputChange
       }),
       createElement("button", { id: "add-btn" }, "+", {
-        click: this.onAddTask
+        click: this.props.onAddTask
       }),
     ]);
   }
@@ -116,7 +114,7 @@ class TodoList extends Component {
 
   onAddInputChange = (event) => {
     this.state.inputValue = event.target.value;
-    this.update();
+    // Убираем this.update() отсюда
   };
 
   onAddTask = () => {
