@@ -76,9 +76,26 @@ class AddTask extends Component {
 class Task extends Component {
   constructor({ task, index, onToggleTask, onDeleteTask }) {
     super();
-    this.state = { task, index };
+    this.state = { 
+      task, 
+      index,
+      deleteConfirm: false 
+    };
     this.onToggleTask = onToggleTask;
     this.onDeleteTask = onDeleteTask;
+  }
+
+  handleDelete = () => {
+    if (!this.state.deleteConfirm) {
+      this.setState({ deleteConfirm: true });
+    } else {
+      this.onDeleteTask(this.state.index);
+    }
+  };
+
+  setState(newState) {
+    Object.assign(this.state, newState);
+    this.update();
   }
 
   render() {
@@ -92,8 +109,10 @@ class Task extends Component {
       createElement("label", {
         style: this.state.task.completed ? "color: gray; text-decoration: line-through;" : ""
       }, this.state.task.text),
-      createElement("button", {}, "🗑️", {
-        click: () => this.onDeleteTask(this.state.index)
+      createElement("button", {
+        style: this.state.deleteConfirm ? "background-color: red;" : ""
+      }, "🗑️", {
+        click: this.handleDelete
       })
     ]);
   }
